@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Given Info</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h4>👋 Hi, Welcome to Full Stack Development ! ✨</h4>
+        <table>
+            <tr>
+                <td>
+                    Name
+                </td>
+                <td>
+                    <%= data["name"] %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Email Addres
+                </td>
+                <td>
+                    <%= data["email"].toLowerCase() %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Contact
+                </td>
+                <td>
+                    <%= data["mobile"] %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    LinkedIn/Portfolio
+                </td>
+                <td>
+                    <%= data["url"] %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Experience
+                </td>
+                <td>
+                    <%= data["experience"] %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Date Of Birth
+                </td>
+                <td>
+                    <%= data["dob"] %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Gender
+                </td>
+                <td>
+                    <%= data["gender"] %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Skills
+                </td>
+                <td>
+                    <%= (data["skills"] != undefined)? data["skills"] : "No Skills Mentioned" %>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
