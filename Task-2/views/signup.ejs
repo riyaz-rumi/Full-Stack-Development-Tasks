@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signup | Express</title>
+    <style>
+        sup {
+            color: red;
+            font-weight: 500;
+        }
+        #container:hover {
+            box-shadow: 0 4px 40px rgb(62, 96, 115) !important;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #4a90e2;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+        }
+
+        input[type="text"]:hover,
+        input[type="email"]:hover,
+        input[type="password"]:hover {
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+        }
+
+        #signup {
+            transition: background-color 0.25s ease, transform 0.15s ease;
+        }
+
+        #signup:hover {
+            background-color: #3081de !important;
+        }
+
+        #signup:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+
+<body
+    style="margin: 0; background: linear-gradient(135deg, #eef2f7, #d6e4f0); display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;min-height: 90vh; padding: 1rem;">
+    <div id="container"
+        style="background: white; border-radius: 12px; width: 100%; max-width: 350px; padding: 2rem 2.5rem; box-shadow: 0 4px 25px rgb(62, 96, 115);">
+
+        <h1
+            style="margin-bottom: 1.5rem; margin-top: 0; font-size: x-large; font-weight: bold; text-align: center; color: #2c3e50;">
+            ✨ Welcome to Express! ✨</h1>
+
+        <form onsubmit="return validateForm()" action="/dashboard" method="post"
+            style="display: flex; flex-direction: column; gap: 1rem;">
+            <label for="username" style="margin-left: 5px; font-weight: 500; color: #34495e;">Username<sup>*</sup></label>
+            <input type="text" id="username" name="username"
+                style="color: gray; margin-top: -10px; background: #fafbfc; width: 100%; outline: none; padding: 0.6rem 0.8rem; border: 1px solid #ccd1d9; border-radius: 6px; transition: all 0.25s ease; box-sizing: border-box; font-size: 1rem; :focus {border-color: #4a90e2;}"
+                required />
+
+            <label for="email" style="margin-left: 5px; font-weight: 500; color: #34495e;">Email<sup>*</sup></label>
+            <input type="email" id="email" name="email"
+                style="color: gray; margin-top: -10px; background: #fafbfc; width: 100%; outline: none; padding: 0.6rem 0.8rem; border: 1px solid #ccd1d9; border-radius: 6px; transition: all 0.25s ease; box-sizing: border-box; font-size: 1rem; :focus {border-color: #4a90e2;}"
+                required />
+            <% if (error) { %>
+                <p style="font-weight: 500; color: red; margin-top: -10px; margin-left: 3px;">
+                    <%= error %>
+                </p>
+                <% } %>
+
+                    <label for="password" style="margin-left: 5px; font-weight: 500; color: #34495e;">Password<sup>*</sup></label>
+                    <input type="password" id="password" name="password"
+                        style="color: gray; margin-top: -10px; background: #fafbfc; width: 100%; outline: none; padding: 0.6rem 0.8rem; border: 1px solid #ccd1d9; border-radius: 6px; transition: all 0.25s ease; box-sizing: border-box; font-size: 1rem; :focus {border-color: #4a90e2;}"
+                        required />
+
+                    <label for="confirm-password" style="margin-left: 5px; font-weight: 500; color: #34495e;">Confirm
+                        Password<sup>*</sup></label>
+                    <input type="password" id="confirm-password" name="confirm-password"
+                        style="color: gray; margin-top: -10px; background: #fafbfc; width: 100%; outline: none; padding: 0.6rem 0.8rem; border: 1px solid #ccd1d9; border-radius: 6px; box-sizing: border-box; transition: all 0.25s ease; font-size: 1rem; :focus {border-color: #4a90e2;}"
+                        required />
+
+                    <input type="submit" id="signup" name="signup" value="Sign Up"
+                        style="margin-top: 0.5rem; background-color: #4a90e2; color: white; border: none; border-radius: 6px; padding: 0.7rem; font-size: 1rem; font-weight: bold; cursor: pointer;" />
+        </form>
+    </div>
+    <script>
+        function validateForm() {
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirm-password');
+
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+
+            if (password !== confirmPassword) {
+                alert('Mismatch between Password & Confirm Password !');
+                passwordField.value = "";
+                confirmPasswordField.value = "";
+                passwordField.focus();
+                return false; // Stops form submission
+            }
+
+            return true; // Allow form submission
+        }
+
+    </script>
+</body>
+
+</html>
