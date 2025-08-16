@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whispers of Ink - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section,
+        [id] {
+            scroll-margin-top: 90px;
+            /* matches your navbar height */
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f3e5f5, #e8f5e9);
+            margin: 0;
+            padding-top: 70px;
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #4a148c;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand svg {
+            height: 32px;
+            width: 32px;
+            margin-right: 10px;
+        }
+
+        /* Fade-in Animation */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-cta {
+            font-size: 1rem;
+            background: linear-gradient(45deg, #7b1fa2, #4a148c);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .nav-cta:hover {
+            background: linear-gradient(45deg, #6a1b9a, #311b92);
+            transform: translateY(-1px);
+        }
+
+
+        header.intro-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 1rem;
+        }
+
+        .intro-title {
+            font-weight: bold;
+            font-size: 2.25rem;
+            color: #6a1b9a;
+            margin-bottom: 0.75rem;
+        }
+
+        .intro-subtitle {
+            font-style: italic;
+            color: #6a1b9a;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .poem-card {
+            background: linear-gradient(-45deg, #fffde7, #e3f2fd);
+            border-radius: 1.25rem;
+            border: 1px solid #d1c4e9;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .poem-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .locked-content {
+            background-color: rgba(255, 255, 255, 0.75);
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-radius: 1rem;
+            border: 2px dashed #4a148c;
+            margin-top: 1rem;
+        }
+
+        .subscribe-btn {
+            background: linear-gradient(45deg, #7b1fa2, #4a148c);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .subscribe-btn:hover {
+            background: linear-gradient(45deg, #6a1b9a, #311b92);
+            transform: scale(1.02);
+        }
+
+        footer {
+            background-color: #4a148c;
+            color: white;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow-sm">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="#">
+                <svg fill="#4a148c" viewBox="0 0 24 24">
+                    <path
+                        d="M12 1a11 11 0 0 0-4 21.2c.3.1.5-.1.6-.3l.1-.8c-2.6.6-3.1-1.3-3.1-1.3a2.4 2.4 0 0 0-1-1.3c-.8-.6 0-.6 0-.6a1.8 1.8 0 0 1 1.3.9c.8 1.3 2.1.9 2.6.7a2 2 0 0 1 .6-1.3c-2.1-.2-4.3-1-4.3-4.5a3.5 3.5 0 0 1 .9-2.5 3.2 3.2 0 0 1 .1-2.4s.8-.3 2.6 1a9.2 9.2 0 0 1 4.8 0c1.8-1.3 2.6-1 2.6-1 .3.8.3 1.7.1 2.4a3.5 3.5 0 0 1 .9 2.5c0 3.5-2.2 4.3-4.3 4.5a2.3 2.3 0 0 1 .7 1.8l.1 1.3c0 .2.2.4.5.3A11 11 0 0 0 12 1z" />
+                </svg>
+                Whispers of Ink
+            </a>
+
+            <% if (isSubscribed) { %>
+                <!-- Navigation links -->
+                <ul class="nav d-none d-md-flex">
+                    <li class="nav-item"><a class="nav-link text-secondary" href="#poems">Poems</a></li>
+                    <li class="nav-item"><a class="nav-link text-secondary" href="#novels">Novels</a></li>
+                    <li class="nav-item"><a class="nav-link text-secondary" href="#quotes">Quotes</a></li>
+                </ul>
+                <% } %>
+
+                    <% if (!isSubscribed) { %>
+                        <a href="/subscribe-whisper-of-ink" class="nav-cta text-decoration-none">Subscribe Now!</a>
+                        <% } %>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <% if (isSubscribed) { %>
+            <div class="poem-card fade-in mb-4"
+                style="background: linear-gradient(-45deg, #e8f5e9, #f3e5f5); border-left: 6px solid #4a148c;">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-user-circle text-primary me-2"></i>
+                    <h4 class="mb-0 text-dark">Welcome, <%= username %>!</h4>
+                </div>
+                <p class="mb-1"><i class="fas fa-envelope me-2 text-primary"></i> <strong>Email:</strong>
+                    <%= email %>
+                </p>
+                <p class="mb-0"><i class="fas fa-book me-2 text-primary"></i> <strong>Favorite Genre:</strong>
+                    <%= genre %>
+                </p>
+            </div>
+            <% } %>
+
+                <!-- Header Section -->
+                <header class="intro-header fade-in mt-8">
+                    <h1 class="intro-title">Curated Poems & Inspirations</h1>
+                    <p class="intro-subtitle">“Let words find you in whispers and linger with purpose.”</p>
+                </header>
+
+                <!-- Free Content -->
+                <!-- Free Content -->
+                <div class="row">
+                    <% if (!isSubscribed) { %>
+                        <div class="col-md-6 fade-in">
+                            <div class="poem-card">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-feather-alt text-primary me-2"></i>
+                                    <h4 class="mb-0">"Hope is the Thing with Feathers"
+                                        <small class="text-muted">— Emily Dickinson</small>
+                                    </h4>
+                                </div>
+                                <p class="text-muted fst-italic">Hope is the thing with feathers<br>
+                                    That perches in the soul,<br>
+                                    And sings the tune without the words,<br>
+                                    And never stops at all...</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 fade-in" style="animation-delay: 0.2s;">
+                            <div class="poem-card">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-book-open text-primary me-2"></i>
+                                    <h4 class="mb-0">"The Road Not Taken"
+                                        <small class="text-muted">— Robert Frost</small>
+                                    </h4>
+                                </div>
+                                <p class="text-muted fst-italic">Two roads diverged in a yellow wood,<br>
+                                    And sorry I could not travel both<br>
+                                    And be one traveler, long I stood...</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 fade-in" style="animation-delay:0.7s;">
+                            <div class="poem-card">
+                                <i class="fas fa-quote-left text-primary me-2"></i>
+                                <p class="text-muted fst-italic">"You miss 100% of the shots you don't take."</p>
+                                <small class="text-muted">— Wayne Gretzky</small>
+                            </div>
+                        </div>
+                        <% } %>
+
+                            <% if (isSubscribed) { %>
+                                <!-- Additional poems only for subscribers -->
+                                <!-- ===== POEMS SECTION ===== -->
+                                <!-- Poems Section -->
+                                <div id="poems" class="col-12 mb-3">
+                                    <h2 class="text-secondary border-bottom pb-2">🌸 Timeless Poems</h2>
+                                </div>
+
+                                <!-- Poem 1 -->
+                                <div class="col-md-6 fade-in">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"Ozymandias"
+                                                <small class="text-muted">— Percy Bysshe Shelley</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">I met a traveller from an antique land,<br>
+                                            Who said—"Two vast and trunkless legs of stone<br>
+                                            Stand in the desert..."</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 2 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.1s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"If—"
+                                                <small class="text-muted">— Rudyard Kipling</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">If you can keep your head when all about
+                                            you<br>
+                                            Are losing theirs and blaming it on you...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 3 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.2s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"Do Not Go Gentle into That Good Night"
+                                                <small class="text-muted">— Dylan Thomas</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">Do not go gentle into that good night,<br>
+                                            Old age should burn and rave at close of day...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 4 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.3s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"Annabel Lee"
+                                                <small class="text-muted">— Edgar Allan Poe</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">It was many and many a year ago,<br>
+                                            In a kingdom by the sea...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 5 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.4s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"The Raven"
+                                                <small class="text-muted">— Edgar Allan Poe</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">Once upon a midnight dreary, while I pondered,
+                                            weak and
+                                            weary,<br>
+                                            Over many a quaint and curious volume of forgotten lore...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 6 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.5s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"She Walks in Beauty"
+                                                <small class="text-muted">— Lord Byron</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">She walks in beauty, like the night<br>
+                                            Of cloudless climes and starry skies...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 7 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.6s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"Invictus"
+                                                <small class="text-muted">— William Ernest Henley</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">I am the master of my fate,<br>
+                                            I am the captain of my soul.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Poem 8 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.7s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-feather-alt text-primary me-2"></i>
+                                            <h4 class="mb-0">"A Red, Red Rose"
+                                                <small class="text-muted">— Robert Burns</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">O my Luve is like a red, red rose<br>
+                                            That’s newly sprung in June...</p>
+                                    </div>
+                                </div>
+                                <!-- ===== NOVELS SECTION ===== -->
+                                <!-- Novels Section -->
+                                <div id="novels" class="col-12 mt-5 mb-3">
+                                    <h2 class="text-secondary border-bottom pb-2">📚 Legendary Novels</h2>
+                                </div>
+                                <!-- Novel 1 -->
+                                <div class="col-md-6 fade-in">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"Pride and Prejudice"
+                                                <small class="text-muted">— Jane Austen</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">A witty exploration of manners, marriage, and
+                                            love in
+                                            19th-century England.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 2 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.1s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"1984"
+                                                <small class="text-muted">— George Orwell</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">A dystopian tale of surveillance, control, and
+                                            the
+                                            fight
+                                            for truth.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 3 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.2s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"To Kill a Mockingbird"
+                                                <small class="text-muted">— Harper Lee</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">A timeless story of justice, race, and
+                                            compassion in
+                                            the
+                                            American South.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 4 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.3s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"Moby-Dick"
+                                                <small class="text-muted">— Herman Melville</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">Captain Ahab’s relentless quest for the elusive
+                                            white
+                                            whale.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 5 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.4s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"The Great Gatsby"
+                                                <small class="text-muted">— F. Scott Fitzgerald</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">A dazzling portrait of the Jazz Age and the
+                                            American
+                                            Dream.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 6 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.5s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"Jane Eyre"
+                                                <small class="text-muted">— Charlotte Brontë</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">A Gothic romance of resilience, morality, and
+                                            self-respect.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 7 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.6s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"The Catcher in the Rye"
+                                                <small class="text-muted">— J.D. Salinger</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">Holden Caulfield’s rebellious journey through
+                                            teenage
+                                            alienation.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Novel 8 -->
+                                <div class="col-md-6 fade-in" style="animation-delay:0.7s;">
+                                    <div class="poem-card">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <h4 class="mb-0">"Wuthering Heights"
+                                                <small class="text-muted">— Emily Brontë</small>
+                                            </h4>
+                                        </div>
+                                        <p class="text-muted fst-italic">A dark, passionate tale of love and revenge on
+                                            the
+                                            Yorkshire moors.</p>
+                                    </div>
+                                </div>
+                                <!-- ===== QUOTES SECTION ===== -->
+
+                                <!-- Quotes Section -->
+                                <div id="quotes" class="col-12 mt-5 mb-3">
+                                    <h2 class="text-secondary border-bottom pb-2">💬 Words of Wisdom</h2>
+                                </div>
+
+                                <div class="col-md-6 fade-in">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"Be yourself; everyone else is already taken."
+                                        </p>
+                                        <small class="text-muted">— Oscar Wilde</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.1s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"In the middle of every difficulty lies
+                                            opportunity."
+                                        </p>
+                                        <small class="text-muted">— Albert Einstein</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.2s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"It always seems impossible until it's done."
+                                        </p>
+                                        <small class="text-muted">— Nelson Mandela</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.3s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"Do what you can, with what you have, where you
+                                            are."
+                                        </p>
+                                        <small class="text-muted">— Theodore Roosevelt</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.4s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"Happiness depends upon ourselves."</p>
+                                        <small class="text-muted">— Aristotle</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.5s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"Not all those who wander are lost."</p>
+                                        <small class="text-muted">— J.R.R. Tolkien</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.6s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"We are what we repeatedly do. Excellence,
+                                            then, is not
+                                            an
+                                            act, but a habit."</p>
+                                        <small class="text-muted">— Will Durant</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fade-in" style="animation-delay:0.7s;">
+                                    <div class="poem-card">
+                                        <i class="fas fa-quote-left text-primary me-2"></i>
+                                        <p class="text-muted fst-italic">"You miss 100% of the shots you don't take."
+                                        </p>
+                                        <small class="text-muted">— Wayne Gretzky</small>
+                                    </div>
+                                </div>
+                </div>
+                <% } %>
+                    </div>
+                    <!-- Locked Content -->
+                    <!-- Show locked content only if NOT subscribed -->
+                    <% if (!isSubscribed) { %>
+                        <div class="row fade-in" style="animation-delay: 0.4s;">
+                            <div class="col-12">
+                                <div class="locked-content">
+                                    <i class="fas fa-lock fa-3x mb-3 text-primary"></i>
+                                    <h4>More Poems & Literary Treasures Await</h4>
+                                    <p>Subscribe to unlock exclusive poems, author spotlights, and timeless quotes.</p>
+                                    <a href="/" class="subscribe-btn">Subscribe for More Content</a>
+                                </div>
+                            </div>
+                            <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-white text-center p-3 ">
+        <div class="container">
+            <p class="mb-2">&copy; 2025 Whispers of Ink. All rights reserved.</p>
+            <div class="mb-2">
+                <a href="tel:+916354223991" class="text-white text-decoration-none me-3">
+                    <i class="fas fa-phone text-white"></i> +91 63542 23991
+                </a>
+                <a href="mailto:rumiriyaz9286@gmail.com" class="text-white text-decoration-none me-3">
+                    <i class="fas fa-envelope text-white"></i> rumiriyaz9286@gmail.com
+                </a>
+                <a href="https://www.linkedin.com/in/riyazrumi" target="_blank"
+                    class="text-white text-decoration-none me-3">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://www.github.com/riyaz-rumi" target="_blank"
+                    class="text-white text-decoration-none me-3">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
