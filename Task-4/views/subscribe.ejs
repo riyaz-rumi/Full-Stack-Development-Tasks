@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscribe | Whispers of Ink</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        /* Strength Meter Container */
+        .strength-container {
+            position: relative;
+            height: 35px;
+            /* Reserve space so layout won’t shift */
+            overflow: hidden;
+        }
+
+        /* Strength bar */
+        .strength-meter {
+            height: 6px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            transition: width 0.4s ease, background-color 0.3s ease;
+        }
+
+        /* Feedback text positioned absolutely inside reserved container */
+        .password-feedback {
+            position: absolute;
+            top: 12px;
+            left: 0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <%- include("components/navbar") %>
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <!-- Subscription Form -->
+            <header class="intro-header fade-in mt-5 mb-1 text-center">
+                <h1 class="intro-title">Discover Literary Treasures</h1>
+                <p class="intro-subtitle">“Let words find you in whispers and linger with purpose.”</p>
+            </header>
+
+            <div class="col-lg-5 col-md-7 col-sm-10 mb-4">
+                <div class="card-item p-4 shadow-lg fade-in">
+                    <h3 class="mb-3"><i class="fas fa-pen-nib me-2"></i>Subscribe</h3>
+                    <form id="subscribeForm" action="/dashboard" method="POST" novalidate>
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label"> Email<sup class="text-danger">*</sup></label>
+                            <input type="text" name="email"
+                            class="form-control <%= errors && errors.email ? 'is-invalid' : '' %>" value="<%= email || '' %>" placeholder="emily@poetry.com" style="text-transform: lowercase;" />
+                            <% if (errors && errors.email) { %>
+                                <div class="invalid-feedback">
+                                <%= errors.email %>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label class="form-label">Password<sup class="text-danger">*</sup></label>
+                            <input type="password" name="password" id="password" class="form-control <%= errors && errors.password ? 'is-invalid' : '' %>" placeholder="**********" minlength="8" maxlength="30" />
+                            <% if (errors && errors.password) { %>
+                                <div class="invalid-feedback">
+                                <%= errors.password %>
+                                </div>
+                            <% } %>
+                            <!-- Reserved space so nothing pushes down -->
+                            <div class="strength-container mt-4">
+                                <div class="strength-meter">
+                                    <div id="strengthBar" class="strength-bar"></div>
+                                </div>
+                                <div id="strengthText" class="password-feedback text-muted"></div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="subscribe-btn w-100">Join the Circle</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Info Section -->
+            <div class="col-lg-6 col-md-10 mb-4">
+                <div class="card-item p-4 shadow-lg fade-in">
+                    <h3><i class="fas fa-book-open me-2"></i>Why Subscribe?</h3>
+                    <p>
+                        At <strong>Whispers of Ink</strong>, we believe that timeless words can heal, inspire, and
+                        empower.
+                        Join thousands of readers who receive handpicked gems every week:
+                    </p>
+                    <ul class="icon-list">
+                        <li><i class="fas fa-quote-left"></i> Daily & Weekly Curated Poems</li>
+                        <li><i class="fas fa-book-reader"></i> Book Recommendations for Thoughtful Reading</li>
+                        <li><i class="fas fa-feather-alt"></i> Inspirational Quotes from Literary Legends</li>
+                        <li><i class="fas fa-bell"></i> Early Access to New Content & Writer Spotlights</li>
+                    </ul>
+                    <p class="mt-3 fst-italic text-muted">"Let timeless words be your daily companion."</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <%- include("components/footer") %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        // Form validation
+        const form = document.getElementById("subscribeForm");
+        form.addEventListener("submit", function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add("was-validated");
+        });
+
+        // Password Strength Checker
+        const passwordInput = document.getElementById("password");
+        const strengthBar = document.getElementById("strengthBar");
+        const strengthText = document.getElementById("strengthText");
+
+        passwordInput.addEventListener("input", function () {
+            const value = passwordInput.value;
+            let strength = 0;
+
+            if (value.length >= 8) strength++;
+            if (/[A-Z]/.test(value)) strength++;
+            if (/[0-9]/.test(value)) strength++;
+            if (/[^A-Za-z0-9]/.test(value)) strength++;
+
+            // Reset
+            strengthBar.style.width = "0";
+            strengthText.textContent = "";
+
+            switch (strength) {
+                case 0:
+                    strengthBar.style.width = "0";
+                    break;
+                case 1:
+                    strengthBar.style.width = "25%";
+                    strengthBar.style.backgroundColor = "#dc3545"; // red
+                    strengthText.textContent = "Weak: Use uppercase, numbers & symbols.";
+                    strengthText.className = "password-feedback text-danger";
+                    break;
+                case 2:
+                    strengthBar.style.width = "50%";
+                    strengthBar.style.backgroundColor = "#ffc107"; // yellow
+                    strengthText.textContent = "Moderate: Add more variety for strength.";
+                    strengthText.className = "password-feedback text-warning";
+                    break;
+                case 3:
+                    strengthBar.style.width = "75%";
+                    strengthBar.style.backgroundColor = "#17a2b8"; // teal
+                    strengthText.textContent = "Good: Almost strong, add a special character.";
+                    strengthText.className = "password-feedback text-info";
+                    break;
+                case 4:
+                    strengthBar.style.width = "100%";
+                    strengthBar.style.backgroundColor = "#28a745"; // green
+                    strengthText.textContent = "Strong: Great password!";
+                    strengthText.className = "password-feedback text-success";
+                    break;
+            }
+        });
+
+        // Toggle Password Visibility
+        const togglePassword = document.getElementById("togglePassword");
+        togglePassword.addEventListener("click", function () {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            this.classList.toggle("fa-eye-slash");
+        });
+    </script>
+</body>
+
+</html>
