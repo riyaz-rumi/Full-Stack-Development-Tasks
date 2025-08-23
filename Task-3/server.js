@@ -1,18 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const path = require("path");
 
-const PORT = 3000;
 const app = express();
+const PORT = 3000;
 
-// Middleware
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// View engine
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", __dirname + "/views");
 
-// Routes
 app.get("/", (req, res) => {
   res.redirect("subscribe-whisper-of-ink");
 });
@@ -26,7 +23,7 @@ app.get("/subscribe-whisper-of-ink", (req, res) => {
   });
 });
 
-app.get("/explore-poems", (req, res) => {
+app.get("/explore", (req, res) => {
   res.render("dashboard", {
     username: null,
     email: null,
